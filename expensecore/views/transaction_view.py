@@ -11,9 +11,12 @@ from django_filters import rest_framework as filters
 class TransactionFilter(filters.FilterSet):
     from_date = filters.DateFilter(field_name="date", lookup_expr='gte')
     to_date = filters.DateFilter(field_name="date", lookup_expr='lte')
-    tags = filters.CharFilter(field_name="tags__name", lookup_expr='icontains')
+    tags = filters.CharFilter(method='filter_tags')
     transaction_type = filters.CharFilter(field_name="transaction_type", lookup_expr='icontains')
 
+    def filter_tags(self, queryset, name, value):
+        tags = value.split(',')
+        return queryset.filter(tags__name__in=tags)
     class Meta:
         model = Transaction
         fields = ['from_date', 'to_date', 'tags', 'transaction_type']
