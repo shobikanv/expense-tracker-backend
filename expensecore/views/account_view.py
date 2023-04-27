@@ -13,7 +13,7 @@ class AccountList(APIView):
     """
     def get(self, request, format=None):
         queryset = Account.objects.all()
-        paginator = Paginator(queryset, 10)  # Show 10 accounts per page
+        paginator = Paginator(queryset, 1000)  # Show 10 accounts per page
         page = request.GET.get('page')
         accounts = paginator.get_page(page)
         serializer = AccountSerializer(accounts, many=True)
